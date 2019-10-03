@@ -54,17 +54,13 @@ namespace Matrix.MatrixOperators
                     throw new ArgumentException();
                 }
             }
-            catch (ArgumentException)
+            catch (ArgumentException ex)
             {
-                Console.WriteLine("Wrong value was entered. Press 1 to try again");
-                if (byte.TryParse(Console.ReadLine(), out byte key) && key == 1)
-                {
-                    return KeyboardInput();
-                }
-                else
-                {
-                    return null;
-                }
+                throw new ArgumentException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new MatrixException(ex.Message);
             }
         }
     }

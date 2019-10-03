@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Matrix
 {
-    class UnmatchedMatrixSizesException:Exception
+    
+    public class UnmatchedMatrixSizesException:MatrixException
     {
         public override string Message { get; } 
         public UnmatchedMatrixSizesException() : base()
@@ -18,4 +19,5 @@ namespace Matrix
         System.Runtime.Serialization.StreamingContext sc) : base(si, sc) {}
         public override string ToString() { return Message; }
     }
+   
 }

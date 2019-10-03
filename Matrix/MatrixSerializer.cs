@@ -19,7 +19,7 @@ namespace Matrix.MatrixOperators
             }
             catch (Exception)
             {
-                Console.WriteLine("Couldn't serialize matrix");
+                throw new MatrixSerializationException();
             }
         }
         public static void BinarySerialization(List<Matrix> list, string filename)
@@ -34,7 +34,7 @@ namespace Matrix.MatrixOperators
             }
             catch (Exception)
             {
-                Console.WriteLine("Couldn't serialize list of matrixes");
+                throw new MatrixSerializationException();
             }
         }
         public static void BinarySerialization(Matrix[] array, string filename)
@@ -49,7 +49,7 @@ namespace Matrix.MatrixOperators
             }
             catch (Exception)
             {
-                Console.WriteLine("Couldn't serialize list of matrixes");
+                throw new MatrixSerializationException();
             }
         }
     }

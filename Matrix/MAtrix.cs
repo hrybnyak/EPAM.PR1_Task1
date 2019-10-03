@@ -52,9 +52,9 @@ namespace Matrix
             {
                 return false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return false;
+                throw new MatrixException(ex.Message);
             }
         }
         public double Determinant() => Determinant(MatrixBody);
@@ -84,15 +84,13 @@ namespace Matrix
                     throw new ArgumentNullException("The matrix body is empty");
                 }
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
-                Console.WriteLine("This matrix is empty.");
-                return 0;
+                throw new ArgumentNullException(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("Couldn't find determinant");
-                return 0;
+                throw new MatrixException(ex.Message);
             }
         }
         private List<List<double>> Minor(int z, int x, List<List<double>> matrix)
@@ -127,15 +125,9 @@ namespace Matrix
                     return A;
                 }
             }
-            catch(ArgumentOutOfRangeException ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Couldn't find minor");
-                return null;
+                throw new MatrixMinorException(ex.Message, ex);
             }
         }
         public int CompareTo(object obj)
@@ -191,20 +183,17 @@ namespace Matrix
                     return new Matrix(result);
                 }
             }
+            catch (ArgumentNullException ex)
+            {
+                throw new ArgumentNullException(ex.Message);
+            }
             catch (UnmatchedMatrixSizesException ex)
             {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-            catch(ArgumentNullException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
+                throw new UnmatchedMatrixSizesException(ex.Message);
             }
             catch (Exception)
             {
-                Console.WriteLine("Couldn't add matrixes");
-                return null;
+                throw new InvalidMatrixOperationException();
             }
         }
         public static Matrix operator -(Matrix left, Matrix right)
@@ -234,20 +223,17 @@ namespace Matrix
                     return new Matrix(result);
                 }
             }
-            catch (UnmatchedMatrixSizesException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
             catch (ArgumentNullException ex)
             {
-                Console.WriteLine(ex.Message);
-                return null;
+                throw new ArgumentNullException(ex.Message);
+            }
+            catch (UnmatchedMatrixSizesException ex)
+            {
+                throw new UnmatchedMatrixSizesException(ex.Message);
             }
             catch (Exception)
             {
-                Console.WriteLine("Couldn't add matrixes");
-                return null;
+                throw new InvalidMatrixOperationException();
             }
         }
         public static Matrix operator *(Matrix left, Matrix right)
@@ -281,23 +267,20 @@ namespace Matrix
                     return new Matrix(result);
                 }
             }
-            catch (UnmatchedMatrixSizesException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
             catch (ArgumentNullException ex)
             {
-                Console.WriteLine(ex.Message);
-                return null;
+                throw new ArgumentNullException(ex.Message);
+            }
+            catch(UnmatchedMatrixSizesException ex)
+            {
+                throw new UnmatchedMatrixSizesException(ex.Message);
             }
             catch (Exception)
             {
-                Console.WriteLine("Couldn't add matrixes");
-                return null;
+                throw new InvalidMatrixOperationException();
             }
         }
-        public static Matrix operator *(int number, Matrix matrix)
+        public static Matrix operator *(object number, Matrix matrix)
         {
             try
             {
@@ -308,12 +291,13 @@ namespace Matrix
                 else
                 {
                     var result = new List<List<double>>();
+                    double numb = (double)number;
                     for (int i = 0; i < matrix.NumberOfRows; i++)
                     {
                         var row = new List<double>();
                         for (int j = 0; j < matrix.NumberOfCollums; j++)
                         {
-                            row.Add(matrix[i, j] * number);
+                            row.Add(matrix[i, j] * numb);
                         }
                         result.Add(row);
                     }
@@ -322,90 +306,19 @@ namespace Matrix
             }
             catch (ArgumentNullException ex)
             {
-                Console.WriteLine(ex.Message);
-                return null;
+                throw new ArgumentNullException(ex.Message);
+            }
+            catch (InvalidCastException ex)
+            {
+                throw new InvalidMatrixOperationException("Invalid type for this operation", ex);
             }
             catch (Exception)
             {
-                Console.WriteLine("Couldn't add matrixes");
-                return null;
+                throw new InvalidMatrixOperationException();
             }
+
         }
-        public static Matrix operator *(Matrix matrix, int number) => number * matrix;
-        public static Matrix operator *(double number, Matrix matrix)
-        {
-            try
-            {
-                if (matrix == null)
-                {
-                    throw new ArgumentNullException("The matrix is empty");
-                }
-                else
-                {
-                    var result = new List<List<double>>();
-                    for (int i = 0; i < matrix.NumberOfRows; i++)
-                    {
-                        var row = new List<double>();
-                        for (int j = 0; j < matrix.NumberOfCollums; j++)
-                        {
-                            row.Add(matrix[i, j] * number);
-                        }
-                        result.Add(row);
-                    }
-                    return new Matrix(result);
-                }
-            }
-            catch (ArgumentNullException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Couldn't add matrixes");
-                return null;
-            }
-        }
-        public static Matrix operator *(Matrix matrix, double number) => number * matrix;
-        public static Matrix operator *(float number, Matrix matrix)
-        {
-            try
-            {
-                if (matrix == null)
-                {
-                    throw new ArgumentNullException("The matrix is empty");
-                }
-                else
-                {
-                    var result = new List<List<double>>();
-                    for (int i = 0; i < matrix.NumberOfRows; i++)
-                    {
-                        var row = new List<double>();
-                        for (int j = 0; j < matrix.NumberOfCollums; j++)
-                        {
-                            row.Add(matrix[i, j] * number);
-                        }
-                        result.Add(row);
-                    }
-                    return new Matrix(result);
-                }
-            }
-            catch (ArgumentNullException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Couldn't add matrixes");
-                return null;
-            }
-        }
-        public static Matrix operator *(Matrix matrix, float number) => number * matrix;
-        public static Matrix operator *(Matrix matrix, byte number) => (int)number * matrix;
-        public static Matrix operator *(byte number, Matrix matrix) => matrix * number;
-        public static Matrix operator *(Matrix matrix, short number) => (int)number * matrix;
-        public static Matrix operator *(short number, Matrix matrix) => matrix * number;
+        public static Matrix operator *(Matrix matrix, object number) => number * matrix;
         public List<double> this[int i] => this.MatrixBody[i];
         public double this[int i, int j] => this.MatrixBody[i][j];
         public override string ToString()

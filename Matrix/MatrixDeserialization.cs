@@ -19,8 +19,7 @@ namespace Matrix.MatrixOperators
             }
             catch (Exception)
             {
-                Console.WriteLine("Couldn't deserialize matrix");
-                matrix = null;
+                throw new MatrixDeserializationException();
             }
         }
         public static void BinaryDeserialization(out List<Matrix> list, string filename)
@@ -35,8 +34,7 @@ namespace Matrix.MatrixOperators
             }
             catch (Exception)
             {
-                Console.WriteLine("Could deserialize list of matrixes");
-                list = null;
+                throw new MatrixDeserializationException();
             }
         }
         public static void BinaryDeserialization(out Matrix[] array, string filename)
@@ -51,8 +49,7 @@ namespace Matrix.MatrixOperators
             }
             catch (Exception)
             {
-                Console.WriteLine("Couldn't deserialize array of matrixes");
-                array = null;
+                throw new MatrixDeserializationException();
             }
         }
     }
